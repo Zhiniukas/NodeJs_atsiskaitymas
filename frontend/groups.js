@@ -28,3 +28,57 @@ try {
     console.error(error);
 }
 
+const addToGroup = document.querySelector("form#joinGroupForm")
+addToGroup.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const groupId = document.querySelector("#groupId").value.trim();
+
+    try {
+        const response = await fetch("http://localhost:5001/accounts", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${accessToken}`
+            },
+            body: JSON.stringify({ groupId: groupId })
+
+        })
+        const result = await response.json();
+        if (!response.ok || response.status >= 400) {
+            return alert(result?.error || response.statusText)
+        } else {
+            return alert(`You successfully joined group Id: ${groupId}`)
+        };
+
+    } catch (error) {
+        return console.error(error);
+    }
+})
+
+const createNewGroup = document.querySelector("form#newGroupForm")
+createNewGroup.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const groupName = document.querySelector("#groupName").value.trim();
+
+    try {
+        const response = await fetch("http://localhost:5001/groups", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${accessToken}`
+            },
+            body: JSON.stringify({ name: groupName })
+
+        })
+        const result = await response.json();
+        if (!response.ok || response.status >= 400) {
+            return alert(result?.error || response.statusText)
+        } else {
+            return alert(`You successfully created group: ${groupName}`)
+        };
+
+    } catch (error) {
+        return console.error(error);
+    }
+})
+

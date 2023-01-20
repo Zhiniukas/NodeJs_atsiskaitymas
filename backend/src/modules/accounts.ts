@@ -32,7 +32,7 @@ export const getAccounts = async (req, res) => {
 };
 
 export const postAccount = async (req, res) => {
-  const groupId = req.body.groupId;
+  const groupId = +req.body.groupId;
   const accessToken = req.headers.authorization;
   let payload = null;
 

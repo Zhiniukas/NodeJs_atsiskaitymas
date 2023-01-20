@@ -1,10 +1,8 @@
-import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
 import { jwtSecret } from "../../config";
 
-dotenv.config();
-
 export const isLoggedIn = (req, res, next) => {
+  const body = req.body;
   const accessToken = req.headers.authorization;
 
   let payload = null;
@@ -22,6 +20,6 @@ export const isLoggedIn = (req, res, next) => {
     return res.status(400).end();
   }
 
-  res.send(`Welcome ${payload.email}`);
+  // res.send(`Welcome ${payload.email}`);
   return next();
 };

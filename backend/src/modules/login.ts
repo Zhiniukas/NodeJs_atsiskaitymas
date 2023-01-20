@@ -2,7 +2,6 @@ import jwt from "jsonwebtoken";
 import mysql from "mysql2/promise";
 import Joi from "joi";
 import bcrypt from "bcryptjs";
-import { TUserPayload } from "./getHome";
 import { MYSQL_CONFIG } from "../../config";
 import { jwtSecret } from "../../config";
 
@@ -21,9 +20,6 @@ export const login = async (req, res) => {
   }
 
   const issuedAt = new Date().getTime();
-  const email = userData.email;
-
-  const userPayload: TUserPayload = { email, issuedAt };
 
   try {
     const con = await mysql.createConnection(MYSQL_CONFIG);

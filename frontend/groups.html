@@ -15,19 +15,37 @@
     />
     <h1>Kodas veikia</h1>
 
-    <div id="groups-grid">Grupės bus čia</div>
+    <div id="ifAuthed">
+      <h3 id="createGroup">Create new group</h3>
+      <form id="newGroup">
+        <div>
+          <label for="groupName">Group Name</label>
+        </div>
+        <div>
+          <input name="groupName" id="groupName" />
+        </div>
 
-    <form id="addToGroup">
-      <div>
-        <label for="groupId">To get access enter required group Id here</label>
-      </div>
-      <div>
-        <input name="groupId" id="groupId" />
-      </div>
+        <button type="submit">Create group</button>
+      </form>
 
-      <button type="submit">Login</button>
-    </form>
+      <div id="groups-grid">Groups will populate here soon. Please wait!</div>
 
+      <h3 id="joinGroup">Join group</h3>
+      <form id="addToGroup">
+        <div>
+          <label for="groupId">Group Id:</label>
+        </div>
+        <div>
+          <input name="groupId" id="groupId" />
+        </div>
+
+        <button type="submit">Join</button>
+      </form>
+    </div>
+
+    <div id="ifNotAuthed">
+      Please <a href="./login.html">login </a> to see avaiable groups!
+    </div>
     <script src="./groups.js" type="module"></script>
   </body>
 </html>

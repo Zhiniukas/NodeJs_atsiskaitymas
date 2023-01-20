@@ -1,4 +1,4 @@
-import { populateGroupList } from "./populateGroupList";
+import { populateGroupList } from "./populateGroupList.js";
 
 const accessToken = localStorage.getItem("accessToken");
 
@@ -17,7 +17,9 @@ try {
 
     console.log(result);
 
-    populateGroupList(result)
+    populateGroupList(result);
+
+
 
 } catch (error) {
     console.error(error);

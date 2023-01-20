@@ -16,7 +16,7 @@ loginForm.addEventListener("submit", async (event) => {
         };
 
         localStorage.setItem("accessToken", authData.accessToken)
-        location.replace('./login.html');
+        location.replace('./groups.html');
 
     } catch (error) {
         return console.error(error);

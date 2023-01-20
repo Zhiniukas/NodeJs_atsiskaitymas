@@ -20,18 +20,26 @@ const populateGroupList = (members) => {
             textContent: member.name,
         });
         const groupId = createElementWithParams("div", {
-            textContent: `Group Id: <a href="./bills.html?group_id=${member.id}">${member.id}</a> `,
+            textContent: `Group Id: ${member.id}</a> `,
         });
+        const groupUrl = document.createElement("a");
+        const urlLink = document.createTextNode("Click here to see all bills for the group");
+
+        groupUrl.appendChild(urlLink);
+        groupUrl.title = "This is Link";
+        groupUrl.href = `./bills.html?group_id=${member.id}`;
 
 
         groupTitle.className = "groupTitle";
         groupId.className = "groupId";
+        groupUrl.className = "groupUrl";
 
         rowElement.className = "record";
 
         rowElement.append(
             groupTitle,
             groupId,
+            groupUrl,
 
         );
         elementList.append(rowElement);

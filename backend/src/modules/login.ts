@@ -1,58 +1,70 @@
 import jwt from "jsonwebtoken";
-import { TUserPayload } from "./getHome";
 import mysql from "mysql2/promise";
+import Joi from "joi";
+import bcrypt from "bcryptjs";
+import { TUserPayload } from "./getHome";
+import { MYSQL_CONFIG } from "../../config";
+import { jwtSecret } from "../../config";
 
-const jwtSecret = process.env.jwtSecret; 
-const MYSQL_CONFIG = {
-  host: process.env.host,
-  user: process.env.user,
-  password: process.env.password,
-  port: +process.env.databasePort,
-  database: process.env.database,
-};
+const userSchema = Joi.object({
+  email: Joi.string().email().trim().lowercase().required(),
+  password: Joi.string().required(),
+});
 
 export const login = async (req, res) => {
-  const { email, password } = req.body;
+  let userData = req.body;
+  try {
+    userData = await userSchema.validateAsync(userData);
+  } catch (error) {
+    console.log(error.message);
+    return res.status(400).send({ error: "Incorrect email or password" }).end();
+  }
 
-  const expiresIn = process.env.jwtExpires;
   const issuedAt = new Date().getTime();
+  const email = userData.email;
 
   const userPayload: TUserPayload = { email, issuedAt };
-
-
-  if (typeof email !== "string" || typeof password !== "string") {
-    return res.status(400).send({ error: "Data is incorrect" });
-  }
-
-  if (!email || !password) {
-    return res
-      .status(400)
-      .send({ error: "Please provide userName and password" });
-  }
 
   try {
     const con = await mysql.createConnection(MYSQL_CONFIG);
 
-    const result = await con.execute(
-      `SELECT FROM users (id, email, password, full_name) WHERE email=${email}` );
+    const [data] = await con.execute(
+      `SELECT * FROM users WHERE email = ${mysql.escape(userData.email)}`
+    );
 
     await con.end();
 
-    console.log(result);
+    if (Array.isArray(data) && data.length === 0) {
+      return res
+        .status(400)
+        .send({ error: "Incorrect email or password" })
+        .end();
+    }
 
-    // if (password !== result.password) {
-    //   return res.status(400).send({ error: "Incorrect login data" });
-    // }
+    const isAuthed = bcrypt.compareSync(userData.password, data[0].password);
 
-    const token = jwt.sign(userPayload, jwtSecret, {
-      algorithm: "HS256",
-      expiresIn,
-    }); 
-  
-    res.send({"accessToken":token, "issuedAt":issuedAt}).end();
+    if (isAuthed) {
+      const token = jwt.sign(
+        {
+          id: data[0].id,
+          email: data[0].email,
+        },
+        jwtSecret,
+        { algorithm: "HS256" }
+      );
 
-  } catch (err) {
-    res.status(500).send(err).end();
-    return console.error(err);
+      return res
+        .send({
+          message: "Succesfully logged in",
+          accessToken: token,
+          issuedAt: issuedAt,
+        })
+        .end();
+    }
+
+    return res.status(400).send({ error: "Incorrect email or password" }).end();
+  } catch (error) {
+    console.log(error);
+    return res.status(500).send({ error: "Unexpected error" });
   }
 };

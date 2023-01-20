@@ -4,10 +4,10 @@ signInForm.addEventListener("submit", async (event) => {
     const userId = document.querySelector("#userId").value.trim();
     const userPassword = document.querySelector("#password").value;
     try {
-        const response = await fetch("http://localhost:5001/sign-in", {
+        const response = await fetch("http://localhost:5001/login", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ userName: userId, password: userPassword })
+            body: JSON.stringify({ email: userId, password: userPassword })
 
         })
         const authData = await response.json();

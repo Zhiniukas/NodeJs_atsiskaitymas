@@ -1,29 +1,36 @@
+import mysql from "mysql2/promise";
+import bcrypt from "bcryptjs";
+import Joi from "joi";
 
+import { MYSQL_CONFIG } from "../../config";
+
+const userSchema = Joi.object({
+  email: Joi.string().email().trim().lowercase().required(),
+  password: Joi.string().required(),
+  fullName: Joi.string()
+});
 
 export const register = async (req, res) => {
-  console.log(req.body);
-  const email = req.body.email.trim();
+ 
+  let userData = req.body;
+  // const email = req.body.email;
+  // const password = req.body.password;
   const fullName = req.body.fullName.trim();
-  const password = req.body.password;
 
-  const cleanEmail = mysql.escape(email).replaceAll("'", "");
-  const cleanFullName = mysql.escape(fullName).replaceAll("'", "");
-  const cleanPassword = +mysql.escape(password).replaceAll("'", "");
-  
-  
-
-  console.log(cleanEmail,cleanFullName, cleanPassword);
-  //const id = new Date().getTime().toString(36);
-
-  if (typeof email !== "string" || !email) {
-    return res.status(400).send(`Incorrect email provided: ${email}`).end();
+   try {
+    userData = await userSchema.validateAsync(userData);
+  } catch (error) {
+    return res.status(400).send({ error: error.message }).end();
   }
 
   try {
+    const hashedPassword = bcrypt.hashSync(userData.password);
+    const cleanFullName = mysql.escape(fullName).replaceAll("'", "");
+    
     const con = await mysql.createConnection(MYSQL_CONFIG);
 
     const result = await con.execute(
-      `INSERT INTO users ( id, email, password, full_name) VALUES( '${cleanEmail}', '${cleanPassword}', '${cleanFullName}')`
+      `INSERT INTO users ( email, password, full_name) VALUES( '${userData.email}', '${hashedPassword}', '${cleanFullName}')`
     );
 
     await con.end();
@@ -33,6 +40,6 @@ export const register = async (req, res) => {
     res.status(500).send(err).end();
     return console.error(err);
   }
-});
+};
 
 

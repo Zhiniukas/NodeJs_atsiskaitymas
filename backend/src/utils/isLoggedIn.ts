@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
-
+import { jwtSecret } from "../../config";
 
 dotenv.config();
 
@@ -14,8 +14,7 @@ export const isLoggedIn = (req, res, next) => {
   }
 
   try {
-    const jwtSecret = process.env.jwtSecret;
-    payload = jwt.verify(accessToken.replace("Bearer ",""), jwtSecret);
+    payload = jwt.verify(accessToken.replace("Bearer ", ""), jwtSecret);
   } catch (err) {
     if (err instanceof jwt.JsonWebTokenError) {
       return res.status(401).send({ error: "User unauthorised" }).end();
@@ -23,6 +22,6 @@ export const isLoggedIn = (req, res, next) => {
     return res.status(400).end();
   }
 
-  res.send(`Welcome ${payload.userName}`);
+  res.send(`Welcome ${payload.email}`);
   return next();
 };

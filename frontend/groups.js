@@ -2,7 +2,7 @@
 const accessToken = localStorage.getItem("accessToken");
 
 try {
-    const response = await fetch("http://localhost:5001/user-settings", {
+    const response = await fetch("http://localhost:5001/groups", {
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${accessToken}`

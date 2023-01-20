@@ -1,3 +1,4 @@
+import { populateGroupList } from "./populateGroupList";
 
 const accessToken = localStorage.getItem("accessToken");
 
@@ -8,10 +9,15 @@ try {
             "Authorization": `Bearer ${accessToken}`
         },
     })
-    const authData = await response.json();
+    const result = await response.json();
     if (!response.ok || response.status >= 400) {
-        alert(authData?.error || response.statusText)
+        alert(result?.error || response.statusText)
     };
+
+
+    console.log(result);
+
+    populateGroupList(result)
 
 } catch (error) {
     console.error(error);

@@ -1,5 +1,5 @@
-const signInForm = document.querySelector("form#signInForm")
-signInForm.addEventListener("submit", async (event) => {
+const loginForm = document.querySelector("form#loginForm")
+loginForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     const userId = document.querySelector("#userId").value.trim();
     const userPassword = document.querySelector("#password").value;
@@ -14,7 +14,10 @@ signInForm.addEventListener("submit", async (event) => {
         if (!response.ok || response.status >= 400) {
             return alert(authData?.error || response.statusText)
         };
+
         localStorage.setItem("accessToken", authData.accessToken)
+        location.replace('./login.html');
+
     } catch (error) {
         return console.error(error);
     }

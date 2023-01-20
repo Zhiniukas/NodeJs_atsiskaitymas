@@ -4,15 +4,38 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Login</title>
   </head>
   <body>
-    <form id="signInForm">
-      <input name="userId" required id="userId" />
-      <input name="password" type="password" required id="password" />
+    <img
+      id="companyLogo"
+      src="https://www.gravatar.com/avatar/bea8807c99e520eec5889bc77bc2e0fb?s=375&amp;r=g&amp;d=mm"
+      class="thumbnail img-responsive full-width"
+      style="width: 375px; height: auto"
+    />
 
+    <form id="loginForm">
+      <div>
+        <label for="userId">Email</label>
+      </div>
+      <div>
+        <input name="userId" required id="userId" />
+      </div>
+      <div>
+        <label for="password">Full Name</label>
+      </div>
+      <div>
+        <input name="password" type="password" required id="password" />
+      </div>
       <button type="submit">Login</button>
     </form>
+
+    <div id="toRegister">
+      If you do not have an account, please
+      <a href="./register.html">register here</a>
+    </div>
+
+    <footer>(C) Zhiniukas 2023</footer>
     <script src="./login.js" type="module"></script>
   </body>
 </html>

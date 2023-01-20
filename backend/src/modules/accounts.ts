@@ -1,6 +1,6 @@
 import mysql from "mysql2/promise";
-import { MYSQL_CONFIG } from "../../config";
 import jwt from "jsonwebtoken";
+import { MYSQL_CONFIG } from "../../config";
 import { jwtSecret } from "../../config";
 
 export const getAccounts = async (req, res) => {

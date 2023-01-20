@@ -7,17 +7,13 @@ import { MYSQL_CONFIG } from "../../config";
 const userSchema = Joi.object({
   email: Joi.string().email().trim().lowercase().required(),
   password: Joi.string().required(),
-  fullName: Joi.string()
+  fullName: Joi.string(),
 });
 
 export const register = async (req, res) => {
- 
   let userData = req.body;
-  // const email = req.body.email;
-  // const password = req.body.password;
-  const fullName = req.body.fullName.trim();
 
-   try {
+  try {
     userData = await userSchema.validateAsync(userData);
   } catch (error) {
     return res.status(400).send({ error: error.message }).end();
@@ -25,8 +21,8 @@ export const register = async (req, res) => {
 
   try {
     const hashedPassword = bcrypt.hashSync(userData.password);
-    const cleanFullName = mysql.escape(fullName).replaceAll("'", "");
-    
+    const cleanFullName = mysql.escape(userData.fullName).replaceAll("'", "");
+
     const con = await mysql.createConnection(MYSQL_CONFIG);
 
     const result = await con.execute(
@@ -41,5 +37,3 @@ export const register = async (req, res) => {
     return console.error(err);
   }
 };
-
-

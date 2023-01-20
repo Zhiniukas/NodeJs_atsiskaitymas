@@ -51,6 +51,10 @@ addToGroup.addEventListener("submit", async (event) => {
         };
 
     } catch (error) {
+        if (error.status = 409) {
+            return alert(`You already are the member of the group with Id:  ${groupId}`)
+        }
+
         return console.error(error);
     }
 })

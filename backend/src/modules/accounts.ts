@@ -59,14 +59,30 @@ export const postAccount = async (req, res) => {
 
   try {
     const con = await mysql.createConnection(MYSQL_CONFIG);
-
-    const result = await con.execute(
-      `INSERT INTO accounts (group_id, user_id) VALUES('${cleanGroupId}', '${payload.id}')`
+    const [data] = await con.execute(
+      `SELECT id, group_id , user_id 
+      FROM accounts 
+      WHERE user_id= ${payload.id} AND group_id=${groupId} ;`
     );
 
-    await con.end();
+    if (Array.isArray(data) && data.length === 0) {
+      try {
+        const con = await mysql.createConnection(MYSQL_CONFIG);
 
-    res.send(result[0]).end();
+        const result = await con.execute(
+          `INSERT INTO accounts (group_id, user_id) VALUES('${cleanGroupId}', '${payload.id}')`
+        );
+
+        await con.end();
+
+        res.send(result[0]).end();
+      } catch (err) {
+        res.status(500).send(err).end();
+        return console.error(err);
+      }
+    } else {
+      return res.status(409).send("Error! Record already exists").end();
+    }
   } catch (err) {
     res.status(500).send(err).end();
     return console.error(err);

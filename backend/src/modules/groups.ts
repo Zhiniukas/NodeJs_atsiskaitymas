@@ -29,14 +29,30 @@ export const postGroup = async (req, res) => {
 
   try {
     const con = await mysql.createConnection(MYSQL_CONFIG);
-
-    const result = await con.execute(
-      `INSERT INTO ${MYSQL_CONFIG.database}.groups (name) VALUES('${cleanGroup}')`
+    const [data] = await con.execute(
+      `SELECT * 
+      FROM ${MYSQL_CONFIG.database}.groups 
+      WHERE name ='${cleanGroup}' ;`
     );
 
-    await con.end();
+    if (Array.isArray(data) && data.length === 0) {
+      try {
+        const con = await mysql.createConnection(MYSQL_CONFIG);
 
-    res.send(result[0]).end();
+        const result = await con.execute(
+          `INSERT INTO ${MYSQL_CONFIG.database}.groups (name) VALUES('${cleanGroup}')`
+        );
+
+        await con.end();
+
+        res.send(result[0]).end();
+      } catch (err) {
+        res.status(500).send(err).end();
+        return console.error(err);
+      }
+    } else {
+      return res.status(409).send("Error! Record already exists").end();
+    }
   } catch (err) {
     res.status(500).send(err).end();
     return console.error(err);

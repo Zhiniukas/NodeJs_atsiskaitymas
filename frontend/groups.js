@@ -82,6 +82,9 @@ createNewGroup.addEventListener("submit", async (event) => {
         };
 
     } catch (error) {
+        if (error.status = 409) {
+            return alert(`This group already exists!`)
+        }
         return console.error(error);
     }
 })

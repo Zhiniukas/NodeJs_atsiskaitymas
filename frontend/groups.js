@@ -35,6 +35,7 @@ addToGroup.addEventListener("submit", async (event) => {
 
     const groupId = document.querySelector("#groupId").value.trim();
 
+
     try {
         const response = await fetch("http://localhost:5001/accounts", {
             method: "POST",
@@ -53,16 +54,11 @@ addToGroup.addEventListener("submit", async (event) => {
         } else {
 
             location.reload();
-
         };
 
     } catch (error) {
 
-        if (error.status = 409) {
-            return alert(`You already are the member of the group with Id:  ${groupId}`)
-        }
-
-        return console.error(error);
+        return alert(error.message);
     }
 })
 

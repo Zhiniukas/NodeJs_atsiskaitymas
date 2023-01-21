@@ -65,7 +65,10 @@ export const postGroup = async (req, res) => {
           return console.error(err);
         }
       } else {
-        return res.status(409).send("Error! Record already exists").end();
+        return res
+          .status(409)
+          .send({ error: "Error! Record already exists" })
+          .end();
       }
     } catch (err) {
       res.status(500).send(err).end();

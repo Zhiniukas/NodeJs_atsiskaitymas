@@ -5,7 +5,7 @@ const accessToken = localStorage.getItem("accessToken");
 document.getElementById("ifAuthed").style.display = "none";
 
 try {
-    const response = await fetch("http://localhost:5001/accounts", {
+    const response = await fetch("http://localhost:5001/groups", {
         headers: {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${accessToken}`
@@ -29,20 +29,20 @@ try {
     console.error(error);
 }
 
-const addToGroup = document.querySelector("form#joinGroupForm")
-addToGroup.addEventListener("submit", async (event) => {
+const createNewGroup = document.querySelector("form#newGroupForm")
+createNewGroup.addEventListener("submit", async (event) => {
     event.preventDefault();
 
-    const groupId = document.querySelector("#groupId").value.trim();
+    const groupName = document.querySelector("#groupName").value.trim();
 
     try {
-        const response = await fetch("http://localhost:5001/accounts", {
+        const response = await fetch("http://localhost:5001/groups", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${accessToken}`
             },
-            body: JSON.stringify({ groupId: groupId })
+            body: JSON.stringify({ name: groupName })
 
         })
 
@@ -53,18 +53,12 @@ addToGroup.addEventListener("submit", async (event) => {
         } else {
 
             location.reload();
-
         };
 
     } catch (error) {
-
         if (error.status = 409) {
-            return alert(`You already are the member of the group with Id:  ${groupId}`)
+            return alert(`This group already exists!`)
         }
-
         return console.error(error);
     }
 })
-
-
-

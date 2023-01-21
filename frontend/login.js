@@ -1,8 +1,10 @@
 const loginForm = document.querySelector("form#loginForm")
 loginForm.addEventListener("submit", async (event) => {
     event.preventDefault();
+
     const userId = document.querySelector("#userId").value.trim();
     const userPassword = document.querySelector("#password").value;
+
     try {
         const response = await fetch("http://localhost:5001/login", {
             method: "POST",
@@ -10,7 +12,9 @@ loginForm.addEventListener("submit", async (event) => {
             body: JSON.stringify({ email: userId, password: userPassword })
 
         })
+
         const authData = await response.json();
+
         if (!response.ok || response.status >= 400) {
             return alert(authData?.error || response.statusText)
         };

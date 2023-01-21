@@ -1,7 +1,6 @@
 import { populateBillsList } from "./populateBillsList.js";
 
 const accessToken = localStorage.getItem("accessToken");
-
 const params = (new URL(document.location)).searchParams;
 const group_id = parseInt(params.get('group_id'));
 
@@ -14,7 +13,9 @@ try {
             "Authorization": `Bearer ${accessToken}`
         },
     })
+
     const result = await response.json();
+
     if (!response.ok || response.status >= 400) {
         alert(result?.error || response.statusText)
 
@@ -34,6 +35,7 @@ try {
 const addNewBill = document.querySelector("form#addBillForm")
 addNewBill.addEventListener("submit", async (event) => {
     event.preventDefault();
+
     const billDescription = document.querySelector("#billDescription").value.trim();
     const billAmmount = document.querySelector("#billAmmount").value.trim();
 
@@ -47,11 +49,15 @@ addNewBill.addEventListener("submit", async (event) => {
             body: JSON.stringify({ groupId: group_id, description: billDescription, ammount: billAmmount })
 
         })
+
         const result = await response.json();
+
         if (!response.ok || response.status >= 400) {
             return alert(result?.error || response.statusText)
         } else {
+
             location.reload();
+
         };
 
     } catch (error) {

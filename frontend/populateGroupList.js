@@ -9,6 +9,7 @@ const createElementWithParams = (tagName, params) => {
 const populateGroupList = (members) => {
     const createMembersList = document.querySelector("#groups-grid");
     createMembersList.innerHTML = "";
+
     const elementList = document.createElement("div");
     createMembersList.append(elementList);
 
@@ -16,15 +17,15 @@ const populateGroupList = (members) => {
 
     members.forEach((member) => {
         const rowElement = document.createElement("div");
+
         const groupTitle = createElementWithParams("div", {
             textContent: member.name,
         });
 
         const groupUrl = document.createElement("a");
-        const urlLink = document.createTextNode(`Id: ${member.id}`);
-
+        const urlLink = document.createTextNode(`Id: ${member.group_id}`);
         groupUrl.appendChild(urlLink);
-        groupUrl.href = `./bills.html?group_id=${member.id}`;
+        groupUrl.href = `./bills.html?group_id=${member.group_id}`;
 
         groupTitle.className = "groupTitle";
         groupUrl.className = "groupUrl";

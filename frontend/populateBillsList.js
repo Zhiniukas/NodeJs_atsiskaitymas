@@ -9,11 +9,11 @@ const createElementWithParams = (tagName, params) => {
 const populateBillsList = (members) => {
     const createMembersList = document.querySelector("#bills-grid");
     createMembersList.innerHTML = "";
-    const listHeader = createElementWithParams("h2", "Group list");
-    const idHeader = createElementWithParams("div", "Id");
-    const descriptionHeader = createElementWithParams("div", "Description");
-    const ammountHeader = createElementWithParams("div", "Ammount");
-    const paidByHeader = createElementWithParams("div", "Paid By");
+    const listHeader = createElementWithParams("h2", { textContent: "Group list" });
+    const idHeader = createElementWithParams("div", { textContent: "Id" });
+    const descriptionHeader = createElementWithParams("div", { textContent: "Description" });
+    const ammountHeader = createElementWithParams("div", { textContent: "Ammount" });
+    const paidByHeader = createElementWithParams("div", { textContent: "Paid By" });
 
     const elementHeader = document.createElement("div");
     elementHeader.className = "billsHeader";
@@ -36,7 +36,7 @@ const populateBillsList = (members) => {
             textContent: member.bill_id,
         });
         const billDescription = createElementWithParams("div", {
-            textContent: member.name,
+            textContent: member.description,
         });
         const bilAmmount = createElementWithParams("div", {
             textContent: member.ammount,

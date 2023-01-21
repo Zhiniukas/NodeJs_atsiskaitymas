@@ -21,7 +21,6 @@ try {
         document.getElementById("ifNotAuthed").style.display = "none";
 
         populateGroupList(result);
-
     };
 
 } catch (error) {
@@ -51,6 +50,7 @@ addToGroup.addEventListener("submit", async (event) => {
         };
 
     } catch (error) {
+
         if (error.status = 409) {
             return alert(`You already are the member of the group with Id:  ${groupId}`)
         }
@@ -74,11 +74,14 @@ createNewGroup.addEventListener("submit", async (event) => {
             body: JSON.stringify({ name: groupName })
 
         })
+
         const result = await response.json();
+
         if (!response.ok || response.status >= 400) {
             return alert(result?.error || response.statusText)
         } else {
-            return alert(`You successfully created group: ${groupName}`)
+
+            location.reload();
         };
 
     } catch (error) {

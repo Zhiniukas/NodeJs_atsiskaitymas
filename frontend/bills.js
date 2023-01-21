@@ -31,7 +31,6 @@ try {
     console.error(error);
 }
 
-
 const addNewBill = document.querySelector("form#addBillForm")
 addNewBill.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -45,14 +44,14 @@ addNewBill.addEventListener("submit", async (event) => {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${accessToken}`
             },
-            body: JSON.stringify({ description: billDescription, ammount: billAmmount })
+            body: JSON.stringify({ groupId: group_id, description: billDescription, ammount: billAmmount })
 
         })
         const result = await response.json();
         if (!response.ok || response.status >= 400) {
             return alert(result?.error || response.statusText)
         } else {
-            return alert("You successfully added new bill")
+            location.reload();
         };
 
     } catch (error) {

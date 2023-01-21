@@ -26,9 +26,9 @@ export const getBills = async (req, res) => {
     try {
       const con = await mysql.createConnection(MYSQL_CONFIG);
       const result = await con.execute(
-        `SELECT users.full_name, bills.id AS "bill_id", bills.description, bills.ammount,${MYSQL_CONFIG.database}.groups.name, ${MYSQL_CONFIG.database}.groups.id AS "group_id"  
+        `SELECT users.full_name, bills.id AS "bill_id", bills.description, bills.ammount  
         FROM (${MYSQL_CONFIG.database}.groups INNER JOIN bills ON ${MYSQL_CONFIG.database}.groups.id = bills.group_id) INNER JOIN users ON bills.user_id = users.id
-        WHERE ${MYSQL_CONFIG.database}.groups.id= ${groupId};`
+        WHERE ${MYSQL_CONFIG.database}.groups.id= ${groupId} ORDER BY bills.id;`
       );
 
       res.send(result[0]).end();
@@ -43,7 +43,6 @@ export const postBill = async (req, res) => {
   const groupId = +req.body.groupId;
   const ammount = +req.body.ammount;
   const description = req.body.description;
-
   const accessToken = req.headers.authorization;
   let payload = null;
 
@@ -70,18 +69,31 @@ export const postBill = async (req, res) => {
       .end();
   }
 
-  try {
-    const con = await mysql.createConnection(MYSQL_CONFIG);
+  if (
+    cleanAmmount.indexOf("\\") > -1 ||
+    cleanDescription.indexOf("\\") > -1 ||
+    cleanGroupId.indexOf("\\") > -1
+  ) {
+    res
+      .status(400)
+      .send({
+        error:
+          "Data provided has reserved characters, like ! * ' ( ) ; : @ & = + $ , / ? % # [ ]",
+      })
+      .end();
+  } else {
+    try {
+      const con = await mysql.createConnection(MYSQL_CONFIG);
+      const result = await con.execute(
+        `INSERT INTO bills (group_id, ammount, description, user_id) VALUES('${cleanGroupId}', '${cleanAmmount}', '${cleanDescription}','${payload.id}')`
+      );
 
-    const result = await con.execute(
-      `INSERT INTO bills (group_id, ammount, description, user_id) VALUES('${cleanGroupId}', '${cleanAmmount}', '${cleanDescription}','${payload.id}')`
-    );
+      await con.end();
 
-    await con.end();
-
-    res.send(result[0]).end();
-  } catch (err) {
-    res.status(500).send(err).end();
-    return console.error(err);
+      res.send(result[0]).end();
+    } catch (err) {
+      res.status(500).send(err).end();
+      return console.error(err);
+    }
   }
 };

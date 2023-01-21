@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bills</title>
+  </head>
+  <body>
+    <img
+      id="companyLogo"
+      src="https://www.gravatar.com/avatar/bea8807c99e520eec5889bc77bc2e0fb?s=375&amp;r=g&amp;d=mm"
+      class="thumbnail img-responsive full-width"
+      style="width: 375px; height: auto"
+    />
+
+    <div id="ifAuthed">
+      <div id="bills-grid">
+        Bills list will populate here soon. Please wait!
+      </div>
+
+      <h3 id="addBill">Add bill</h3>
+      <form id="addBillForm">
+        <div>
+          <label for="billDescription">Description:</label>
+        </div>
+        <div>
+          <input name="billDescription" id="billDescription" />
+        </div>
+        <div>
+          <label for="billAmmount">Ammount:</label>
+        </div>
+        <div>
+          <input name="billAmmount" id="billAmmount" />
+        </div>
+
+        <button type="submit">Add</button>
+      </form>
+    </div>
+
+    <div id="ifNotAuthed">Please <a href="./login.html">login </a> first!</div>
+    <footer>(C) Zhiniukas 2023</footer>
+    <script src="./bills.js" type="module"></script>
+  </body>
+</html>

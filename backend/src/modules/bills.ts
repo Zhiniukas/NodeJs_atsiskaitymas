@@ -4,35 +4,43 @@ import { MYSQL_CONFIG } from "../../config";
 import { jwtSecret } from "../../config";
 
 export const getBills = async (req, res) => {
-  const groupId = req.params.group_id;
+  const groupId = +req.params.group_id;
   const accessToken = req.headers.authorization;
   let payload = null;
 
-  try {
-    payload = jwt.verify(accessToken.replace("Bearer ", ""), jwtSecret);
-  } catch (err) {
-    if (err instanceof jwt.JsonWebTokenError) {
-      return res.status(401).send({ error: "User unauthorised groups" }).end();
+  if (groupId < 0 || Number.isNaN(groupId) || typeof groupId !== "number") {
+    res.status(400).send({ error: "Please provide group ID!" }).end();
+  } else {
+    try {
+      payload = jwt.verify(accessToken.replace("Bearer ", ""), jwtSecret);
+    } catch (err) {
+      if (err instanceof jwt.JsonWebTokenError) {
+        return res
+          .status(401)
+          .send({ error: "User unauthorised groups" })
+          .end();
+      }
+      return res.status(400).end();
     }
-    return res.status(400).end();
-  }
 
-  try {
-    const con = await mysql.createConnection(MYSQL_CONFIG);
-    const result = await con.execute(
-      `SELECT users.full_name, bills.id AS "bill_id", bills.description, bills.ammount,${MYSQL_CONFIG.database}.groups.name, ${MYSQL_CONFIG.database}.groups.id AS "group_id"  
+    try {
+      const con = await mysql.createConnection(MYSQL_CONFIG);
+      const result = await con.execute(
+        `SELECT users.full_name, bills.id AS "bill_id", bills.description, bills.ammount,${MYSQL_CONFIG.database}.groups.name, ${MYSQL_CONFIG.database}.groups.id AS "group_id"  
         FROM (${MYSQL_CONFIG.database}.groups INNER JOIN bills ON ${MYSQL_CONFIG.database}.groups.id = bills.group_id) INNER JOIN users ON bills.user_id = users.id
         WHERE ${MYSQL_CONFIG.database}.groups.id= ${groupId};`
-    );
-    res.send(result[0]).end();
-  } catch (err) {
-    res.status(500).send(err).end();
-    return console.error(err);
+      );
+
+      res.send(result[0]).end();
+    } catch (err) {
+      res.status(500).send(err).end();
+      return console.error(err);
+    }
   }
 };
 
 export const postBill = async (req, res) => {
-  const groupId = req.body.groupId;
+  const groupId = +req.body.groupId;
   const ammount = +req.body.ammount;
   const description = req.body.description;
 

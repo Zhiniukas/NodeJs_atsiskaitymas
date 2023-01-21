@@ -16,6 +16,9 @@ export const getAccounts = async (req, res) => {
     return res.status(400).end();
   }
 
+  // "${MYSQL_CONFIG.database}.groups.id" ir kitur reikia dėl lokalios MySQL duombazės,
+  // kuri eidavo klaidomis dėl "groups" lentelės pavadinimo be database.table formato.
+
   try {
     const con = await mysql.createConnection(MYSQL_CONFIG);
     const result = await con.execute(
@@ -23,6 +26,7 @@ export const getAccounts = async (req, res) => {
       FROM (${MYSQL_CONFIG.database}.groups INNER JOIN accounts ON ${MYSQL_CONFIG.database}.groups.id = accounts.group_id) INNER JOIN users ON accounts.user_id = users.id
       WHERE users.id= ${payload.id};`
     );
+    await con.end();
 
     res.send(result[0]).end();
   } catch (err) {
@@ -56,34 +60,46 @@ export const postAccount = async (req, res) => {
       .send(`Incorrect group ID provided: ${groupId}`)
       .end();
   }
-  try {
-    const con = await mysql.createConnection(MYSQL_CONFIG);
-    const [data] = await con.execute(
-      `SELECT id, group_id , user_id 
+
+  //IF to prevent crashing of the backend server due to code injection
+  if (cleanGroupId.indexOf("\\") > -1) {
+    res
+      .status(400)
+      .send({
+        error:
+          "Data provided has reserved characters, like ! * ' ( ) ; : @ & = + $ , / ? % # [ ]",
+      })
+      .end();
+  } else {
+    try {
+      const con = await mysql.createConnection(MYSQL_CONFIG);
+      const [data] = await con.execute(
+        `SELECT id, group_id , user_id 
       FROM accounts 
       WHERE user_id= ${payload.id} AND group_id=${cleanGroupId} ;`
-    );
+      );
+      await con.end();
 
-    if (Array.isArray(data) && data.length === 0) {
-      try {
-        const con = await mysql.createConnection(MYSQL_CONFIG);
+      if (Array.isArray(data) && data.length === 0) {
+        try {
+          const con = await mysql.createConnection(MYSQL_CONFIG);
 
-        const result = await con.execute(
-          `INSERT INTO accounts (group_id, user_id) VALUES('${cleanGroupId}', '${payload.id}')`
-        );
+          const result = await con.execute(
+            `INSERT INTO accounts (group_id, user_id) VALUES('${cleanGroupId}', '${payload.id}')`
+          );
+          await con.end();
 
-        await con.end();
-
-        res.send(result[0]).end();
-      } catch (err) {
-        res.status(500).send(err).end();
-        return console.error(err);
+          res.send(result[0]).end();
+        } catch (err) {
+          res.status(500).send(err).end();
+          return console.error(err);
+        }
+      } else {
+        return res.status(409).send("Error! Record already exists").end();
       }
-    } else {
-      return res.status(409).send("Error! Record already exists").end();
+    } catch (err) {
+      res.status(500).send(err).end();
+      return console.error(err);
     }
-  } catch (err) {
-    res.status(500).send(err).end();
-    return console.error(err);
   }
 };

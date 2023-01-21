@@ -23,6 +23,9 @@ export const getBills = async (req, res) => {
       return res.status(400).end();
     }
 
+    // "${MYSQL_CONFIG.database}.groups.id" ir kitur reikia dėl lokalios MySQL duombazės,
+    // kuri eidavo klaidomis dėl "groups" lentelės pavadinimo be database.table formato.
+
     try {
       const con = await mysql.createConnection(MYSQL_CONFIG);
       const result = await con.execute(
@@ -30,6 +33,7 @@ export const getBills = async (req, res) => {
         FROM (${MYSQL_CONFIG.database}.groups INNER JOIN bills ON ${MYSQL_CONFIG.database}.groups.id = bills.group_id) INNER JOIN users ON bills.user_id = users.id
         WHERE ${MYSQL_CONFIG.database}.groups.id= ${groupId} ORDER BY bills.id;`
       );
+      await con.end();
 
       res.send(result[0]).end();
     } catch (err) {
@@ -68,6 +72,8 @@ export const postBill = async (req, res) => {
       .send(`Incorrect group ID provided: ${groupId}`)
       .end();
   }
+
+  //IF to prevent crashing of the backend server due to code injection
   if (
     cleanAmmount.indexOf("\\") > -1 ||
     cleanDescription.indexOf("\\") > -1 ||
@@ -80,18 +86,19 @@ export const postBill = async (req, res) => {
           "Data provided has reserved characters, like ! * ' ( ) ; : @ & = + $ , / ? % # [ ]",
       })
       .end();
-  }
-  try {
-    const con = await mysql.createConnection(MYSQL_CONFIG);
-    const result = await con.execute(
-      `INSERT INTO bills (group_id, ammount, description, user_id) VALUES('${cleanGroupId}', '${cleanAmmount}', '${cleanDescription}','${payload.id}')`
-    );
+  } else {
+    try {
+      const con = await mysql.createConnection(MYSQL_CONFIG);
+      const result = await con.execute(
+        `INSERT INTO bills (group_id, ammount, description, user_id) VALUES('${cleanGroupId}', '${cleanAmmount}', '${cleanDescription}','${payload.id}')`
+      );
 
-    await con.end();
+      await con.end();
 
-    res.send(result[0]).end();
-  } catch (err) {
-    res.status(500).send(err).end();
-    return console.error(err);
+      res.send(result[0]).end();
+    } catch (err) {
+      res.status(500).send(err).end();
+      return console.error(err);
+    }
   }
 };

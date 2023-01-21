@@ -22,6 +22,7 @@ export const register = async (req, res) => {
   const hashedPassword = bcrypt.hashSync(userData.password);
   const cleanFullName = mysql.escape(userData.fullName).replaceAll("'", "");
 
+  //IF to prevent crashing of the backend server due to code injection
   if (cleanFullName.indexOf("\\") > -1) {
     res
       .status(400)

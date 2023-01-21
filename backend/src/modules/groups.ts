@@ -5,9 +5,14 @@ export const getGroups = async (_, res) => {
   try {
     const con = await mysql.createConnection(MYSQL_CONFIG);
 
+    // "${MYSQL_CONFIG.database}.groups.id" ir kitur reikia dėl lokalios MySQL duombazės,
+    // kuri eidavo klaidomis dėl "groups" lentelės pavadinimo be database.table formato.
+
     const result = await con.execute(
-      `SELECT ${MYSQL_CONFIG.database}.groups.id AS "group_id", ${MYSQL_CONFIG.database}.groups.name FROM ${MYSQL_CONFIG.database}.groups ORDER BY ${MYSQL_CONFIG.database}.groups.id;`
+      `SELECT ${MYSQL_CONFIG.database}.groups.id AS "group_id" ${MYSQL_CONFIG.database}.groups.name FROM ${MYSQL_CONFIG.database}.groups ORDER BY ${MYSQL_CONFIG.database}.groups.id;`
     );
+    await con.end();
+
     res.send(result[0]).end();
   } catch (err) {
     res.status(500).send(err).end();
@@ -20,13 +25,7 @@ export const postGroup = async (req, res) => {
 
   const cleanGroup = mysql.escape(newGroup).replaceAll("'", "");
 
-  if (typeof newGroup !== "string" || !newGroup) {
-    return res
-      .status(400)
-      .send(`Incorrect group name provided: ${newGroup}`)
-      .end();
-  }
-
+  //IF to prevent crashing of the backend server due to code injection
   if (cleanGroup.indexOf("\\") > -1) {
     res
       .status(400)
@@ -35,35 +34,42 @@ export const postGroup = async (req, res) => {
           "Data provided has reserved characters, like ! * ' ( ) ; : @ & = + $ , / ? % # [ ]",
       })
       .end();
-  }
-  try {
-    const con = await mysql.createConnection(MYSQL_CONFIG);
-    const [data] = await con.execute(
-      `SELECT * 
+  } else {
+    if (typeof newGroup !== "string" || !newGroup) {
+      return res
+        .status(400)
+        .send(`Incorrect group name provided: ${newGroup}`)
+        .end();
+    }
+
+    try {
+      const con = await mysql.createConnection(MYSQL_CONFIG);
+      const [data] = await con.execute(
+        `SELECT * 
       FROM ${MYSQL_CONFIG.database}.groups 
       WHERE name ='${cleanGroup}' ;`
-    );
+      );
+      await con.end();
 
-    if (Array.isArray(data) && data.length === 0) {
-      try {
-        const con = await mysql.createConnection(MYSQL_CONFIG);
+      if (Array.isArray(data) && data.length === 0) {
+        try {
+          const con = await mysql.createConnection(MYSQL_CONFIG);
+          const result = await con.execute(
+            `INSERT INTO ${MYSQL_CONFIG.database}.groups (name) VALUES('${cleanGroup}')`
+          );
+          await con.end();
 
-        const result = await con.execute(
-          `INSERT INTO ${MYSQL_CONFIG.database}.groups (name) VALUES('${cleanGroup}')`
-        );
-
-        await con.end();
-
-        res.send(result[0]).end();
-      } catch (err) {
-        res.status(500).send(err).end();
-        return console.error(err);
+          res.send(result[0]).end();
+        } catch (err) {
+          res.status(500).send(err).end();
+          return console.error(err);
+        }
+      } else {
+        return res.status(409).send("Error! Record already exists").end();
       }
-    } else {
-      return res.status(409).send("Error! Record already exists").end();
+    } catch (err) {
+      res.status(500).send(err).end();
+      return console.error(err);
     }
-  } catch (err) {
-    res.status(500).send(err).end();
-    return console.error(err);
   }
 };

@@ -6,7 +6,7 @@ html {
 #wrapper {
   padding: 2%;
   overflow-x: hidden;
-  max-width: 600px;
+  min-width: 500px;
   margin: auto;
   background-color: bisque;
   border-radius: 20px;
@@ -82,11 +82,20 @@ button:hover {
 }
 
 .record {
-  background-color: rgb(110, 166, 147);
-  /* height: 200px auto auto auto; */
-  /* grid-template-columns: repeat(4, 1fr); */
-  padding: 10vh 0;
+  background-color: beige;
+  border: 3px solid peru;
+  border-radius: 5px;
+  padding: 5vh 0;
   text-align: center;
+}
+
+.groupTitle {
+  padding: 10px;
+  font-size: 1.1em;
+}
+
+.groupUrl {
+  font-size: 2em;
 }
 
 #billGroupName {

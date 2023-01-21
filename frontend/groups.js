@@ -92,3 +92,8 @@ createNewGroup.addEventListener("submit", async (event) => {
     }
 })
 
+const myGroups = document.querySelector("#myGroupsButton")
+addToGroup.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+}

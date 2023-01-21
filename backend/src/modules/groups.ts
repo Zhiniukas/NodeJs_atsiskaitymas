@@ -6,7 +6,7 @@ export const getGroups = async (_, res) => {
     const con = await mysql.createConnection(MYSQL_CONFIG);
 
     const result = await con.execute(
-      `SELECT * FROM ${MYSQL_CONFIG.database}.groups ORDER BY ${MYSQL_CONFIG.database}.groups.id;;`
+      `SELECT * FROM ${MYSQL_CONFIG.database}.groups ORDER BY ${MYSQL_CONFIG.database}.groups.id;`
     );
     res.send(result[0]).end();
   } catch (err) {

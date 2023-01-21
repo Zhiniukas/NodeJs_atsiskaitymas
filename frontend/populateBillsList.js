@@ -8,12 +8,12 @@ const createElementWithParams = (tagName, params) => {
 
 const populateBillsList = (members) => {
 
-    const createGroupName = document.querySelector("#groupName");
+    const createGroupName = document.querySelector("#billGroupName");
     createGroupName.innerHTML = "";
     const groupName = createElementWithParams("div", { textContent: members[0].name });
     const listHeader = createElementWithParams("div", { textContent: "Group's bills:" });
 
-    listHeader.className = "listHeader";
+    listHeader.className = "billListHeader";
 
     createGroupName.append(groupName, listHeader);
     console.log(groupName);
@@ -31,6 +31,8 @@ const populateBillsList = (members) => {
 
     const elementHeader = document.createElement("div");
     elementHeader.className = "billsHeader";
+    descriptionHeader.className = "billDescription";
+
     elementHeader.append
         (
             idHeader,
@@ -58,7 +60,8 @@ const populateBillsList = (members) => {
             textContent: member.full_name,
         });
 
-        rowElement.className = "record";
+        rowElement.className = "billRecord";
+        billDescription.className = "billDescription";
 
         rowElement.append(
             billId,

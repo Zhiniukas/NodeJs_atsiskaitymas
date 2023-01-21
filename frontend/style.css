@@ -83,16 +83,39 @@ button:hover {
 
 .record {
   background-color: rgb(110, 166, 147);
-  /* grid-template-columns: 400px auto auto auto; */
   /* height: 200px auto auto auto; */
   /* grid-template-columns: repeat(4, 1fr); */
   padding: 10vh 0;
   text-align: center;
 }
 
-.billsHeader {
+#billGroupName {
+  font-size: 1.5em;
+  font-weight: 700;
+}
+
+.billListHeader {
+  padding-top: 50px;
+  padding-bottom: 20px;
+  font-weight: 500;
+}
+
+.billsHeader, .billRecord {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: 50px 2fr 100px 1fr;
+  padding: 5px;
+}
+
+.billsHeader {
+  font-weight: 700;
+}
+
+.billDescription {
+  text-align: left;
+}
+
+.billRecord:nth-child(odd) {
+  background-color: beige;
 }
 
 footer {

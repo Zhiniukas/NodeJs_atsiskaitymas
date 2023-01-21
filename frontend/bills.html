@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <title>Bills</title>
+  </head>
+  <body>
+    <div id="wrapper">
+      <header>
+        <img
+          src="https://www.gravatar.com/avatar/bea8807c99e520eec5889bc77bc2e0fb?s=375&amp;r=g&amp;d=mm"
+        />
+
+        <h1>Zhiniukas Expence Tracking System</h1>
+      </header>
+
+      <div id="ifAuthed">
+        <div id="billGroupName"></div>
+        <div id="bills-grid">There are no bills registered for this group!</div>
+
+        <h3 id="addBill">Add bill</h3>
+        <form id="addBillForm">
+          <div>
+            <label for="billDescription">Description:</label>
+          </div>
+          <div>
+            <input name="billDescription" id="billDescription" />
+          </div>
+          <div>
+            <label for="billAmmount">Ammount:</label>
+          </div>
+          <div>
+            <input name="billAmmount" id="billAmmount" />
+          </div>
+
+          <button type="submit">Add</button>
+        </form>
+      </div>
+
+      <div id="welcomeLinks">
+        <a href="./groups.html">Back to the group list </a>
+      </div>
+
+      <div id="ifNotAuthed">
+        Please <a href="./login.html">login </a> first!
+      </div>
+      <footer>(C) Zhiniukas 2023</footer>
+    </div>
+    <script src="./bills.js" type="module"></script>
+  </body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <title>Login</title>
+  </head>
+  <body>
+    <div id="wrapper">
+      <header>
+        <img
+          src="https://www.gravatar.com/avatar/bea8807c99e520eec5889bc77bc2e0fb?s=375&amp;r=g&amp;d=mm"
+        />
+        <h1>Zhiniukas Expence Tracking System</h1>
+      </header>
+
+      <form id="loginForm">
+        <div>
+          <label for="userId">Email</label>
+        </div>
+        <div>
+          <input name="userId" required id="userId" />
+        </div>
+        <div>
+          <label for="password">Password</label>
+        </div>
+        <div>
+          <input name="password" type="password" required id="password" />
+        </div>
+        <button type="submit">Login</button>
+      </form>
+
+      <div id="welcomeLinks">
+        If you do not have an account, please
+        <a href="./register.html">register here</a>
+      </div>
+
+      <footer>(C) Zhiniukas 2023</footer>
+    </div>
+    <script src="./login.js" type="module"></script>
+  </body>
+</html>

@@ -1,0 +1,14 @@
+{
+    "overrides": [
+        {
+            "files": [
+                "*.mts",
+                "*.cts",
+                "*.ts"
+            ],
+            "options": {
+                "parser": "typescript"
+            }
+        }
+    ]
+}

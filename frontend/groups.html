@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
+    <title>Groups</title>
+  </head>
+  <body>
+    <div id="wrapper">
+      <header>
+        <img
+          src="https://www.gravatar.com/avatar/bea8807c99e520eec5889bc77bc2e0fb?s=375&amp;r=g&amp;d=mm"
+        />
+
+        <h1>Zhiniukas Expence Tracking System</h1>
+      </header>
+      <div id="ifAuthed">
+        <div id="groups-grid">
+          Group list will populate here soon. Please wait!
+        </div>
+
+        <h3 id="joinGroup">Join group</h3>
+        <form id="joinGroupForm">
+          <div>
+            <label for="groupId">Group Id:</label>
+          </div>
+          <div>
+            <input name="groupId" id="groupId" />
+          </div>
+
+          <button type="submit">Join</button>
+        </form>
+      </div>
+
+      <div id="welcomeLinks">
+        You can see all available groups
+        <a href="./newgroup.html">here</a>
+      </div>
+
+      <div id="ifNotAuthed">
+        Please <a href="./login.html">login </a> to see avaiable groups!
+      </div>
+
+      <footer>(C) Zhiniukas 2023</footer>
+    </div>
+    <script src="./groups.js" type="module"></script>
+  </body>
+</html>

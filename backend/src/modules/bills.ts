@@ -62,13 +62,12 @@ export const postBill = async (req, res) => {
   const cleanAmmount = mysql.escape(ammount).replaceAll("'", "");
   const cleanDescription = mysql.escape(description).replaceAll("'", "");
 
-  if (typeof groupId !== "number" || !groupId) {
+  if (groupId < 0 || Number.isNaN(groupId) || typeof groupId !== "number") {
     return res
       .status(400)
       .send(`Incorrect group ID provided: ${groupId}`)
       .end();
   }
-
   if (
     cleanAmmount.indexOf("\\") > -1 ||
     cleanDescription.indexOf("\\") > -1 ||
@@ -81,19 +80,18 @@ export const postBill = async (req, res) => {
           "Data provided has reserved characters, like ! * ' ( ) ; : @ & = + $ , / ? % # [ ]",
       })
       .end();
-  } else {
-    try {
-      const con = await mysql.createConnection(MYSQL_CONFIG);
-      const result = await con.execute(
-        `INSERT INTO bills (group_id, ammount, description, user_id) VALUES('${cleanGroupId}', '${cleanAmmount}', '${cleanDescription}','${payload.id}')`
-      );
+  }
+  try {
+    const con = await mysql.createConnection(MYSQL_CONFIG);
+    const result = await con.execute(
+      `INSERT INTO bills (group_id, ammount, description, user_id) VALUES('${cleanGroupId}', '${cleanAmmount}', '${cleanDescription}','${payload.id}')`
+    );
 
-      await con.end();
+    await con.end();
 
-      res.send(result[0]).end();
-    } catch (err) {
-      res.status(500).send(err).end();
-      return console.error(err);
-    }
+    res.send(result[0]).end();
+  } catch (err) {
+    res.status(500).send(err).end();
+    return console.error(err);
   }
 };

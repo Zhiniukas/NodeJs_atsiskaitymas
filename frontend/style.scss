@@ -1,0 +1,116 @@
+html {
+    font-family: "Avenir Next", "Avenir", sans-serif;
+    // margin: auto;
+    text-align: center;
+
+}
+
+#wrapper {
+    padding: 2%;
+    overflow-x: hidden;
+    max-width: 600px;
+    margin: auto;
+    background-color: bisque;
+    border-radius: 20px;
+}
+
+header {
+    min-height: 100px;
+    
+   
+    img {
+        width: 100px;
+        height: auto;
+        border-radius: 10px;
+    }
+}
+
+h1 {
+    margin-bottom: 50px;
+}
+
+h3{
+    font-size: 1.5em;
+    padding-top: 50px;
+}
+
+#welcomeLinks, #ifNotAuthed {
+    text-align: left;
+    padding: 20px;
+    font-size: 1.1em;
+}
+
+label {
+    margin: 10px 0 10px 0px;
+    display: inline-block;
+    // font-size: 1.3em;
+    font-weight: 600;
+}
+
+input,
+textarea {
+    margin: 0 auto;
+    display: block;
+    width: 250px;
+    height: 30px;
+    border: 1px solid darkblue;
+    border-radius: 5px;
+    outline: none;
+    // font-size: 1.2em;
+    padding-left: 10px;
+}
+
+textarea {
+    width: 300px;
+    height: 70px;
+    margin-bottom: 20px;
+}
+
+button {
+    width: 200px;
+    height: 30px;
+    background-color:rgb(190, 190, 190);
+    margin: 10px;
+    /* margin-bottom: 70px; */
+    font-size: 1.1em;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color:rgb(128, 128, 128);
+}
+
+.groupList {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 20px;
+    padding: 10px;
+}
+
+.record {
+    background-color: rgb(110, 166, 147);
+    /* grid-template-columns: 400px auto auto auto; */
+    /* height: 200px auto auto auto; */
+    /* grid-template-columns: repeat(4, 1fr); */
+    padding: 10vh 0;
+    text-align: center;
+}
+
+.billsHeader {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+
+footer {
+    color: gray;
+    padding: 20px;
+    padding-top: 50px;
+    text-align: left;
+    padding-bottom: 0px;
+
+    a {
+        text-decoration: none;
+        color: gray;
+    }
+}

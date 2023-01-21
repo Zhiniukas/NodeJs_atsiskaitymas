@@ -4,56 +4,55 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css" />
     <title>Registration</title>
   </head>
   <body>
-    <img
-      id="companyLogo"
-      src="https://www.gravatar.com/avatar/bea8807c99e520eec5889bc77bc2e0fb?s=375&amp;r=g&amp;d=mm"
-      class="thumbnail img-responsive full-width"
-      style="width: 375px; height: auto"
-    />
-    <h1>Zhiniukas Expence Tranking System</h1>
+    <div id="wrapper">
+      <header>
+        <img
+          src="https://www.gravatar.com/avatar/bea8807c99e520eec5889bc77bc2e0fb?s=375&amp;r=g&amp;d=mm"
+        />
 
-    <form id="registrationForm">
-      <div>
-        <label for="email">Email</label>
-      </div>
-      <div>
-        <input name="email" type="email" required id="email" />
-      </div>
-      <div>
-        <label for="password">Password</label>
-      </div>
-      <div>
-        <input name="password" type="password" required id="password" />
-      </div>
-      <div>
-        <label for="password2">Confirm password</label>
-      </div>
-      <div>
-        <input name="password2" type="password" required id="password2" />
-      </div>
-      <div>
-        <label for="fullName">Full Name</label>
-      </div>
-      <div>
-        <input name="fullName" required id="fullName" />
-      </div>
-      <div>
-        <input type="checkbox" id="agree" name="agree" value="agreement" />
-        <label for="coding">I Agree to the terms and conditions</label>
+        <h1>Zhiniukas Expence Tracking System</h1>
+      </header>
+
+      <form id="registrationForm">
+        <div>
+          <label for="email">Email</label>
+        </div>
+        <div>
+          <input name="email" type="email" required id="email" />
+        </div>
+        <div>
+          <label for="password">Password</label>
+        </div>
+        <div>
+          <input name="password" type="password" required id="password" />
+        </div>
+        <div>
+          <label for="password2">Confirm password</label>
+        </div>
+        <div>
+          <input name="password2" type="password" required id="password2" />
+        </div>
+        <div>
+          <label for="fullName">Full Name</label>
+        </div>
+        <div>
+          <input name="fullName" required id="fullName" />
+        </div>
+
+        <button type="submit">Register</button>
+      </form>
+
+      <div id="welcomeLinks">
+        If you already have an account, please
+        <a href="./login.html">login here</a>
       </div>
 
-      <button type="submit">Register</button>
-    </form>
-
-    <div id="toLogin">
-      If you already have an account, please
-      <a href="./login.html">login here</a>
+      <footer>(C) Zhiniukas 2023</footer>
     </div>
-
-    <footer>(C) Zhiniukas 2023</footer>
     <script src="./register.js" type="module"></script>
   </body>
 </html>

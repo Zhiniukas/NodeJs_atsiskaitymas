@@ -11,25 +11,28 @@ const populateBillsList = (members) => {
     const createGroupName = document.querySelector("#groupName");
     createGroupName.innerHTML = "";
     const groupName = createElementWithParams("div", { textContent: members[0].name });
-    createGroupName.append(groupName);
+    const listHeader = createElementWithParams("div", { textContent: "Group's bills:" });
+
+    listHeader.className = "listHeader";
+
+    createGroupName.append(groupName, listHeader);
     console.log(groupName);
     console.log(members);
 
     const createMembersList = document.querySelector("#bills-grid");
     createMembersList.innerHTML = "";
-    const listHeader = createElementWithParams("div", { textContent: "Group's bills:" });
+
     const idHeader = createElementWithParams("div", { textContent: "Id" });
     const descriptionHeader = createElementWithParams("div", { textContent: "Description" });
     const ammountHeader = createElementWithParams("div", { textContent: "Ammount" });
     const paidByHeader = createElementWithParams("div", { textContent: "Paid By" });
 
-    listHeader.className = "listHeader";
+
 
     const elementHeader = document.createElement("div");
     elementHeader.className = "billsHeader";
     elementHeader.append
         (
-            listHeader,
             idHeader,
             descriptionHeader,
             ammountHeader,

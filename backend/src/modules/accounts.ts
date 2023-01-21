@@ -55,36 +55,35 @@ export const postAccount = async (req, res) => {
       .status(400)
       .send(`Incorrect group ID provided: ${groupId}`)
       .end();
-  } else {
-    try {
-      const con = await mysql.createConnection(MYSQL_CONFIG);
-      const [data] = await con.execute(
-        `SELECT id, group_id , user_id 
+  }
+  try {
+    const con = await mysql.createConnection(MYSQL_CONFIG);
+    const [data] = await con.execute(
+      `SELECT id, group_id , user_id 
       FROM accounts 
       WHERE user_id= ${payload.id} AND group_id=${cleanGroupId} ;`
-      );
+    );
 
-      if (Array.isArray(data) && data.length === 0) {
-        try {
-          const con = await mysql.createConnection(MYSQL_CONFIG);
+    if (Array.isArray(data) && data.length === 0) {
+      try {
+        const con = await mysql.createConnection(MYSQL_CONFIG);
 
-          const result = await con.execute(
-            `INSERT INTO accounts (group_id, user_id) VALUES('${cleanGroupId}', '${payload.id}')`
-          );
+        const result = await con.execute(
+          `INSERT INTO accounts (group_id, user_id) VALUES('${cleanGroupId}', '${payload.id}')`
+        );
 
-          await con.end();
+        await con.end();
 
-          res.send(result[0]).end();
-        } catch (err) {
-          res.status(500).send(err).end();
-          return console.error(err);
-        }
-      } else {
-        return res.status(409).send("Error! Record already exists").end();
+        res.send(result[0]).end();
+      } catch (err) {
+        res.status(500).send(err).end();
+        return console.error(err);
       }
-    } catch (err) {
-      res.status(500).send(err).end();
-      return console.error(err);
+    } else {
+      return res.status(409).send("Error! Record already exists").end();
     }
+  } catch (err) {
+    res.status(500).send(err).end();
+    return console.error(err);
   }
 };
